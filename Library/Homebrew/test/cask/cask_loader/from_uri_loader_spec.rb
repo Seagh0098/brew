@@ -10,6 +10,11 @@ RSpec.describe Cask::CaskLoader::FromURILoader do
       expect(described_class.try_new("https://brew.sh/")).not_to be_nil
     end
 
+    it "returns nil when path loading is disabled" do
+      ENV["HOMEBREW_FORBID_PACKAGES_FROM_PATHS"] = "1"
+      expect(described_class.try_new(URI("https://brew.sh/"))).to be_nil
+    end
+
     it "returns nil when given a string with Cask contents containing a URL" do
       expect(described_class.try_new(<<~RUBY)).to be_nil
         cask 'token' do
